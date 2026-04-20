@@ -30,6 +30,26 @@ const state = {
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
 
+// ===== Theme Toggle (dark/light + scroll to top, persisted in localStorage) =====
+const THEME_STORAGE_KEY = 'cedisa-theme';
+const applyTheme = (theme) => {
+  document.documentElement.setAttribute('data-theme', theme === 'light' ? 'light' : 'dark');
+};
+const savedTheme = localStorage.getItem(THEME_STORAGE_KEY) || 'dark';
+applyTheme(savedTheme);
+
+document.addEventListener('DOMContentLoaded', () => {
+  const btnTheme = document.getElementById('theme-toggle');
+  if (!btnTheme) return;
+  btnTheme.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+    const next = current === 'light' ? 'dark' : 'light';
+    applyTheme(next);
+    localStorage.setItem(THEME_STORAGE_KEY, next);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+
 // Upload
 const dropzoneBank = $('#dropzone-bank');
 const dropzoneFusion = $('#dropzone-fusion');
